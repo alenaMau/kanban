@@ -2,9 +2,9 @@ Vue.component('add-card', {
     template: `
     <div>
        <form @submit.prevent="addCard" class="form">
-            <input v-model="title" name="title"> 
-            <input v-model="description" name="description"> 
-            <input type="date" v-model="deadline" name="deadline"> 
+            <input v-model="title" name="title" placeholder="Заголовок"> 
+            <input v-model="description" name="description" placeholder="Описание"> 
+            <input type="date" v-model="deadline" name="deadline" placeholder="Дэдлайн"> 
             <button type="submit">Добавить</button>
         </form>
     </div>
@@ -90,9 +90,6 @@ Vue.component('works', {
         </div>
     `,
     props: {
-        cards: {
-            type: Array
-        },
         works: {
             type: Array
         },
