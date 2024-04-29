@@ -4,7 +4,7 @@ Vue.component('add-card', {
        <form @submit.prevent="addCard" class="form">
             <input v-model="title" name="title"> 
             <input v-model="description" name="description"> 
-            <input v-model="deadline" name="deadline"> 
+            <input type="date" v-model="deadline" name="deadline"> 
             <button type="submit">Добавить</button>
         </form>
     </div>
@@ -24,7 +24,7 @@ Vue.component('add-card', {
             const title = this.title;
             const description = this.description;
             const deadline = this.deadline;
-            const dataCreation = new Date().toLocaleTimeString()
+            const dataCreation = new Date().toLocaleDateString()
             const card = {
                 title,
                 description,
@@ -139,7 +139,9 @@ Vue.component('test', {
 Vue.component('completed', {
     template: `    
         <div>
-            <div v-for="finish in finished" class="card">
+            <div v-for="finish in finished" class="card" :key="finish.id">
+            <h2 v-if="realTime => new Date(finish.deadline)">Карточка не выполнена в срок</h2>
+            <h2 v-else="realTime <= new Date(finish.deadline)">Карточка выполнена в срок</h2>
                <p>Заголовок: {{finish.title}} </p>
                <p>Описание: {{finish.description}}</p>
                <p>Дэдлайн: {{finish.deadline}}</p>
@@ -155,6 +157,41 @@ Vue.component('completed', {
             type: Array
         },
     },
+    data() {
+        return {
+            realTime:new Date()
+        };
+    },
+    methods: {
+        handleNewItem() {
+            console.log('Новый элемент появился в массиве finished');
+            let realTime = new Date().toLocaleDateString()
+            this.finished.forEach(item => {
+                console.log(item.deadline);
+                if(realTime > item.deadline ) {
+                    console.log("ПРОСРОЧКА")
+                     const delay = "Карточка не выполненна в срок"
+                } else {
+
+                }
+            });
+            console.log(realTime)
+            if(this.deadline && realTime) {
+                console.log(this.deadline)
+                console.log(realTime)
+            }
+        }
+    },
+    watch: {
+        finished: {
+            handler(newValue) {
+                if (newValue.length > 0) {
+                    this.handleNewItem();
+                }
+            },
+            deep: true
+        }
+    }
 });
 
 Vue.component('edit-card', {
