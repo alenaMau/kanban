@@ -114,6 +114,7 @@ Vue.component('test', {
                <p>Дэдлайн: {{test.deadline}}</p>
                <p>Дата создания: {{test.dataCreation}}</p>
                <p v-if="test.lastEdited">Последнее редактирование: {{test.lastEdited}}</p>
+               <button @click="clickWork(test)"><- Перенести в работу</button>
                <button @click="handleClick(test)">Перенести в Выполнненые -></button>
                <button @click="editItem(test)">Редактирование</button>
             </div> 
@@ -127,6 +128,9 @@ Vue.component('test', {
     methods: {
         editItem(test) {
             this.$emit('button-edit', test, 'tests');
+        },
+        clickWork(test) {
+            this.$emit('button-click-work', test);
         },
         handleClick(test) {
             this.$emit('button-completed', test)
@@ -228,6 +232,11 @@ let app = new Vue({
             this.works.push(card);
             this.removeCardFromArray(card, this.cards);
             this.removeCardFromArray(card, this.tests);
+            this.saveArrayToLocalStorage('works', this.works);
+        },
+        redirectionWorks(test) {
+            this.works.push(test);
+            this.removeCardFromArray(test, this.tests);
             this.saveArrayToLocalStorage('works', this.works);
         },
         addCompleted(work) {
