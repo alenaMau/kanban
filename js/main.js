@@ -121,9 +121,6 @@ Vue.component('test', {
         </div>
     `,
     props: {
-        cards: {
-            type: Array
-        },
         tests: {
             type: Array
         }
@@ -141,7 +138,7 @@ Vue.component('test', {
 Vue.component('completed', {
     template: `    
         <div>
-            <div v-for="finish in finished" class="card" :key="finish.id">
+            <div v-for="finish in finished" class="card">
             <h2 v-if="realTime > new Date(finish.deadline)">Карточка не выполнена в срок</h2>
             <h2 v-else>Карточка выполнена в срок</h2>
                <p>Заголовок: {{finish.title}} </p>
@@ -152,9 +149,6 @@ Vue.component('completed', {
         </div>
     `,
     props: {
-        cards: {
-            type: Array
-        },
         finished: {
             type: Array
         },
