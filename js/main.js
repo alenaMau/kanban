@@ -96,7 +96,6 @@ Vue.component('works', {
     },
     methods: {
         handleClick(work) {
-            console.log(work)
             this.$emit('button-test', work);
         },
         editItem(work) {
@@ -130,7 +129,6 @@ Vue.component('test', {
             this.$emit('button-edit', test, 'tests');
         },
         handleClick(test) {
-            console.log(test)
             this.$emit('button-completed', test)
         }
     }
@@ -239,7 +237,6 @@ let app = new Vue({
             this.saveArrayToLocalStorage('finished', this.finished);
         },
         handleButtonClicked(work) {
-            console.log('Событие "button-clicked"');
             this.tests.push(work);
             this.removeCardFromArray(work, this.cards);
             this.removeCardFromArray(work, this.works);
