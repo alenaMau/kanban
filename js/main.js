@@ -25,11 +25,13 @@ Vue.component('add-card', {
             const description = this.description;
             const deadline = this.deadline;
             const dataCreation = new Date().toLocaleDateString()
+            const lastEdited = new Date().toLocaleString()
             const card = {
                 title,
                 description,
                 deadline,
-                dataCreation
+                dataCreation,
+                lastEdited
             }
             cards.push(card)
             localStorage.setItem('cards', JSON.stringify(cards))
@@ -49,6 +51,7 @@ Vue.component('card', {
                <p>Описание: {{card.description}}</p>
                <p>Дэдлайн: {{card.deadline}}</p>
                <p>Дата создания: {{card.dataCreation}}</p>
+               <p v-if="card.lastEdited">Последнее редактирование: {{card.lastEdited}}</p>
                <button @click="clickDelete(index)">Удалить</button>
                <button @click="handleClickWorks(card)">Перенести в работу -></button>
                <button @click="editCard(card)">Редактирование</button>
@@ -80,6 +83,7 @@ Vue.component('works', {
                <p>Описание: {{work.description}}</p>
                <p>Дэдлайн: {{work.deadline}}</p>
                <p>Дата создания: {{work.dataCreation}}</p>
+               <p v-if="work.lastEdited">Последнее редактирование: {{work.lastEdited}}</p>
                <button @click="handleClick(work)">Перенести в тест-></button>
                <button @click="editItem(work)">Редактирование</button>
             </div> 
@@ -113,6 +117,7 @@ Vue.component('test', {
                <p>Описание: {{test.description}}</p>
                <p>Дэдлайн: {{test.deadline}}</p>
                <p>Дата создания: {{test.dataCreation}}</p>
+               <p v-if="test.lastEdited">Последнее редактирование: {{test.lastEdited}}</p>
                <button @click="handleClick(test)">Перенести в Выполнненые -></button>
                <button @click="editItem(test)">Редактирование</button>
             </div> 
@@ -140,8 +145,8 @@ Vue.component('completed', {
     template: `    
         <div>
             <div v-for="finish in finished" class="card" :key="finish.id">
-            <h2 v-if="realTime => new Date(finish.deadline)">Карточка не выполнена в срок</h2>
-            <h2 v-else="realTime <= new Date(finish.deadline)">Карточка выполнена в срок</h2>
+            <h2 v-if="realTime > new Date(finish.deadline)">Карточка не выполнена в срок</h2>
+            <h2 v-else>Карточка выполнена в срок</h2>
                <p>Заголовок: {{finish.title}} </p>
                <p>Описание: {{finish.description}}</p>
                <p>Дэдлайн: {{finish.deadline}}</p>
@@ -159,39 +164,9 @@ Vue.component('completed', {
     },
     data() {
         return {
-            realTime:new Date()
+            realTime: new Date()
         };
     },
-    methods: {
-        handleNewItem() {
-            console.log('Новый элемент появился в массиве finished');
-            let realTime = new Date().toLocaleDateString()
-            this.finished.forEach(item => {
-                console.log(item.deadline);
-                if(realTime > item.deadline ) {
-                    console.log("ПРОСРОЧКА")
-                     const delay = "Карточка не выполненна в срок"
-                } else {
-
-                }
-            });
-            console.log(realTime)
-            if(this.deadline && realTime) {
-                console.log(this.deadline)
-                console.log(realTime)
-            }
-        }
-    },
-    watch: {
-        finished: {
-            handler(newValue) {
-                if (newValue.length > 0) {
-                    this.handleNewItem();
-                }
-            },
-            deep: true
-        }
-    }
 });
 
 Vue.component('edit-card', {
@@ -203,6 +178,7 @@ Vue.component('edit-card', {
                 <input v-model="item.description" placeholder="Описание">
                 <input type="date" v-model="item.deadline" placeholder="Дэдлайн">
                 <button @click="saveChanges">Сохранить изменения</button>
+                <p v-if="item.lastEdited">Последнее редактирование: {{ item.lastEdited }}</p>
             </div> 
         </div>
     `,
@@ -235,10 +211,11 @@ let app = new Vue({
     },
     methods: {
         editItem(item, itemType) {
-            this.editingItem = Object.assign({}, item);
+            this.editingItem = Object.assign({}, item, { lastEdited: new Date().toLocaleString() });
             this.editingItemType = itemType;
         },
         saveEditedItem(editedItem) {
+            editedItem.lastEdited = new Date().toLocaleString();
             const itemType = this.editingItemType;
             const index = this[itemType].findIndex(item => item.id === editedItem.id);
             if (index !== -1) {
