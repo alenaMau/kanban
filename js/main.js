@@ -11,11 +11,11 @@ Vue.component('add-card', {
 
  `,
     data() {
-        return{
-            title:"",
-            description:"",
-            deadline:"",
-            cards:[]
+        return {
+            title: "",
+            description: "",
+            deadline: "",
+            cards: []
         }
     },
     methods: {
@@ -33,7 +33,7 @@ Vue.component('add-card', {
             }
             cards.push(card)
             localStorage.setItem('cards', JSON.stringify(cards))
-            this.$emit("card-added",card)
+            this.$emit("card-added", card)
             this.title = "";
             this.description = "";
             this.deadline = ""
@@ -57,12 +57,12 @@ Vue.component('card', {
     `,
     props: {
         cards: {
-            type:Array,
+            type: Array,
         }
     },
     methods: {
         editCard(card) {
-            this.$emit('button-edit', card);
+            this.$emit('button-edit', card, 'cards');
         },
         clickDelete(index) {
             this.$emit('button-delete', index);
@@ -81,22 +81,26 @@ Vue.component('works', {
                <p>Дэдлайн: {{work.deadline}}</p>
                <p>Дата создания: {{work.dataCreation}}</p>
                <button @click="handleClick(work)">Перенести в тест-></button>
+               <button @click="editItem(work)">Редактирование</button>
             </div> 
         </div>
     `,
     props: {
         cards: {
-            type:Array
+            type: Array
         },
         works: {
-            type:Array
+            type: Array
         },
     },
     methods: {
         handleClick(work) {
             console.log(work)
             this.$emit('button-test', work);
-        }
+        },
+        editItem(work) {
+            this.$emit('button-edit', work, 'works');
+        },
     }
 
 });
@@ -110,18 +114,22 @@ Vue.component('test', {
                <p>Дэдлайн: {{test.deadline}}</p>
                <p>Дата создания: {{test.dataCreation}}</p>
                <button @click="handleClick(test)">Перенести в Выполнненые -></button>
+               <button @click="editItem(test)">Редактирование</button>
             </div> 
         </div>
     `,
     props: {
         cards: {
-            type:Array
+            type: Array
         },
         tests: {
-            type:Array
+            type: Array
         }
     },
     methods: {
+        editItem(test) {
+            this.$emit('button-edit', test, 'tests');
+        },
         handleClick(test) {
             console.log(test)
             this.$emit('button-completed', test)
@@ -141,10 +149,10 @@ Vue.component('completed', {
     `,
     props: {
         cards: {
-            type:Array
+            type: Array
         },
         finished: {
-            type:Array
+            type: Array
         },
     },
 });
@@ -153,51 +161,55 @@ Vue.component('edit-card', {
     template: `    
         <div>
             <div class="edit">
-                <input type="text" v-model="editedCard.title" placeholder="Заголовок">
-                <input v-model="editedCard.description" placeholder="Описание">
-                <input type="date" v-model="editedCard.deadline" placeholder="Дэдлайн">
+                <p>Редактирование</p>
+                <input type="text" v-model="item.title" placeholder="Заголовок">
+                <input v-model="item.description" placeholder="Описание">
+                <input type="date" v-model="item.deadline" placeholder="Дэдлайн">
                 <button @click="saveChanges">Сохранить изменения</button>
             </div> 
         </div>
     `,
     props: {
-        card: {
+        item: {
             type: Object,
+            required: true
+        },
+        itemType: {
+            type: String,
             required: true
         }
     },
-    data() {
-        return {
-            editedCard: Object.assign({}, this.card)
-        };
-    },
     methods: {
         saveChanges() {
-            this.$emit('save-changes', this.editedCard);
+            this.$emit('save-changes', this.item);
         }
     }
 });
 
-
 let app = new Vue({
     el: '#app',
     data: {
-        cards:[],
-        tests:[],
-        works:[],
-        finished:[],
-        editingCard: null
+        cards: [],
+        tests: [],
+        works: [],
+        finished: [],
+        editingItem: null,
+        editingItemType: null,
     },
     methods: {
-        editCards(card) {
-            this.editingCard = card;
+        editItem(item, itemType) {
+            this.editingItem = Object.assign({}, item);
+            this.editingItemType = itemType;
         },
-        saveEditedCard(editedCard) {
-            const index = this.cards.findIndex(card => card.id === editedCard.id);
+        saveEditedItem(editedItem) {
+            const itemType = this.editingItemType;
+            const index = this[itemType].findIndex(item => item.id === editedItem.id);
             if (index !== -1) {
-                this.$set(this.cards, index, editedCard);
+                this.$set(this[itemType], index, editedItem);
+                this.saveArrayToLocalStorage(itemType, this[itemType]);
             }
-            this.editingCard = null;
+            this.editingItem = null;
+            this.editingItemType = null;
         },
         deleteCard(index) {
             console.log(index)

@@ -13,20 +13,21 @@
 <body>
 <div></div>
 <div id="app">
+    <p>Добавление</p>
     <add-card @card-added="addCardToList"></add-card>
+    <edit-card v-if="editingItem" :item="editingItem" :itemType="editingItemType" @save-changes="saveEditedItem"></edit-card>
     <div class="row">
         <div class="column">
             <p>Запланированные задачи</p>
-            <card @button-clicked="addWorks" @button-delete="deleteCard" @button-edit="editCards" :cards="cards"></card>
-            <edit-card v-if="editingCard" :card="editingCard" @save-changes="saveEditedCard"></edit-card>
+            <card @button-clicked="addWorks" @button-edit="editItem" @button-delete="deleteCard" :cards="cards"></card>
         </div>
         <div class="column">
             <p>Задачи в работе</p>
-            <works :works="works" @button-test="handleButtonClicked"></works>
+            <works :works="works" @button-test="handleButtonClicked" @button-edit="editItem"></works>
         </div>
         <div class="column">
             <p>Тестирование</p>
-            <test :tests="tests" @button-completed="addCompleted"></test>
+            <test :tests="tests" @button-edit="editItem" @button-completed="addCompleted"></test>
         </div>
         <div class="column">
             <p>Выполненные задачи</p>
