@@ -152,19 +152,30 @@ Vue.component('completed', {
 Vue.component('edit-card', {
     template: `    
         <div>
-            <div>
-             <p>Кукуккуккуккукуккукукукукук</p>
+            <div class="edit">
+                <input type="text" v-model="editedCard.title" placeholder="Заголовок">
+                <input v-model="editedCard.description" placeholder="Описание">
+                <input type="date" v-model="editedCard.deadline" placeholder="Дэдлайн">
+                <button @click="saveChanges">Сохранить изменения</button>
             </div> 
         </div>
     `,
     props: {
-        cards: {
-            type:Array
-        },
-        finished: {
-            type:Array
-        },
+        card: {
+            type: Object,
+            required: true
+        }
     },
+    data() {
+        return {
+            editedCard: Object.assign({}, this.card)
+        };
+    },
+    methods: {
+        saveChanges() {
+            this.$emit('save-changes', this.editedCard);
+        }
+    }
 });
 
 
@@ -175,10 +186,18 @@ let app = new Vue({
         tests:[],
         works:[],
         finished:[],
+        editingCard: null
     },
     methods: {
         editCards(card) {
-
+            this.editingCard = card;
+        },
+        saveEditedCard(editedCard) {
+            const index = this.cards.findIndex(card => card.id === editedCard.id);
+            if (index !== -1) {
+                this.$set(this.cards, index, editedCard);
+            }
+            this.editingCard = null;
         },
         deleteCard(index) {
             console.log(index)

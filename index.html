@@ -18,6 +18,7 @@
         <div class="column">
             <p>Запланированные задачи</p>
             <card @button-clicked="addWorks" @button-delete="deleteCard" @button-edit="editCards" :cards="cards"></card>
+            <edit-card v-if="editingCard" :card="editingCard" @save-changes="saveEditedCard"></edit-card>
         </div>
         <div class="column">
             <p>Задачи в работе</p>
