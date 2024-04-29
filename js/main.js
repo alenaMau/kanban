@@ -52,9 +52,11 @@ Vue.component('card', {
                <p>Дэдлайн: {{card.deadline}}</p>
                <p>Дата создания: {{card.dataCreation}}</p>
                <p v-if="card.lastEdited">Последнее редактирование: {{card.lastEdited}}</p>
-               <button @click="clickDelete(index)">Удалить</button>
-               <button @click="handleClickWorks(card)">Перенести в работу -></button>
-               <button @click="editCard(card)">Редактирование</button>
+               <div class="row">
+                     <button @click="clickDelete(index)">Удалить</button>
+                     <button @click="handleClickWorks(card)">Перенести в работу -></button>
+                     <button @click="editCard(card)">Редактирование</button>
+                </div>
             </div>
         </div>
     `,
@@ -84,8 +86,10 @@ Vue.component('works', {
                <p>Дэдлайн: {{work.deadline}}</p>
                <p>Дата создания: {{work.dataCreation}}</p>
                <p v-if="work.lastEdited">Последнее редактирование: {{work.lastEdited}}</p>
-               <button @click="handleClick(work)">Перенести в тест-></button>
-               <button @click="editItem(work)">Редактирование</button>
+               <div class="row">
+                    <button @click="handleClick(work)">Перенести в тест-></button>
+                    <button @click="editItem(work)">Редактирование</button>
+               </div>
             </div> 
         </div>
     `,
@@ -114,9 +118,11 @@ Vue.component('test', {
                <p>Дэдлайн: {{test.deadline}}</p>
                <p>Дата создания: {{test.dataCreation}}</p>
                <p v-if="test.lastEdited">Последнее редактирование: {{test.lastEdited}}</p>
-               <button @click="clickWork(test)"><- Перенести в работу</button>
-               <button @click="handleClick(test)">Перенести в Выполнненые -></button>
-               <button @click="editItem(test)">Редактирование</button>
+               <div class="row">
+                    <button @click="clickWork(test)"><- Перенести в работу</button>
+                    <button @click="handleClick(test)">Перенести в Выполнненые -></button>
+                    <button @click="editItem(test)">Редактирование</button>
+                </div>
             </div> 
         </div>
     `,
