@@ -92,6 +92,9 @@ Vue.component('works', {
                     <button @click="handleClick(work)">Перенести в тест-></button>
                     <button @click="editItem(work)">Редактирование</button>
                </div>
+                <div v-if="work.reason">
+                    <p>Причина возврата: {{ work.reason }}</p>
+                </div>
             </div> 
             </transition-group>
         </div>
@@ -127,6 +130,9 @@ Vue.component('test', {
                     <button @click="handleClick(test)">Перенести в Выполнненые -></button>
                     <button @click="editItem(test)">Редактирование</button>
                 </div>
+                <div v-if="test.reason">
+                    <p>Причина возврата: {{ test.reason }}</p>
+                </div>
             </div>
            </transition-group> 
         </div>
@@ -141,7 +147,10 @@ Vue.component('test', {
             this.$emit('button-edit', test, 'tests');
         },
         clickWork(test) {
-            this.$emit('button-click-work', test);
+            const reason = prompt('Введите причину возврата:');
+            if (reason !== null) {
+                this.$emit('button-click-work', test, reason);
+            }
         },
         handleClick(test) {
             this.$emit('button-completed', test)
@@ -183,6 +192,9 @@ Vue.component('edit-card', {
                 <input type="date" v-model="item.deadline" placeholder="Дэдлайн">
                 <button @click="saveChanges">Сохранить изменения</button>
                 <p v-if="item.lastEdited">Последнее редактирование: {{ item.lastEdited }}</p>
+                <div v-if="work.reason">
+                    <p>Причина возврата: {{ work.reason }}</p>
+                </div>
             </div> 
         </div>
     `,
@@ -245,7 +257,8 @@ let app = new Vue({
             this.removeCardFromArray(card, this.tests);
             this.saveArrayToLocalStorage('works', this.works);
         },
-        redirectionWorks(test) {
+        redirectionWorks(test, reason) {
+            test.reason = reason;
             this.works.push(test);
             this.removeCardFromArray(test, this.tests);
             this.saveArrayToLocalStorage('works', this.works);
