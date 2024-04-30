@@ -167,6 +167,9 @@ Vue.component('completed', {
                <p>Описание: {{finish.description}}</p>
                <p>Дэдлайн: {{finish.deadline}}</p>
                <p>Дата создания: {{finish.dataCreation}}</p>
+                <div v-if="finish.reason">
+                    <p>Причина возврата: {{ finish.reason }}</p>
+                </div>
             </div> 
         </div>
     `,
@@ -192,8 +195,8 @@ Vue.component('edit-card', {
                 <input type="date" v-model="item.deadline" placeholder="Дэдлайн">
                 <button @click="saveChanges">Сохранить изменения</button>
                 <p v-if="item.lastEdited">Последнее редактирование: {{ item.lastEdited }}</p>
-                <div v-if="work.reason">
-                    <p>Причина возврата: {{ work.reason }}</p>
+                <div v-if="item.reason">
+                    <p>Причина возврата: {{ item.reason }}</p>
                 </div>
             </div> 
         </div>
