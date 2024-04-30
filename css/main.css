@@ -21,12 +21,20 @@ body {
     padding: 1rem;
 }
 
-.fade-enter-active, .fade-leave-active  {
+.fade-enter-active, .fade-leave-active {
     transition: all .5s ease;
 }
 .fade-enter, .fade-leave-to {
     opacity: 0;
-    transform: translateX(-100px);
+}
+.fade-move {
+    transition: transform .7s ease;
+}
+.fade-enter-from-left {
+    transform: translateX(-100%);
+}
+.fade-leave-to-right {
+    transform: translateX(100%);
 }
 
 .row {
