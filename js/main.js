@@ -8,7 +8,6 @@ Vue.component('add-card', {
             <button type="submit">Добавить</button>
         </form>
     </div>
-
  `,
     data() {
         return {
@@ -46,7 +45,8 @@ Vue.component('add-card', {
 Vue.component('card', {
     template: `
         <div>
-            <div v-for="(card,index) in cards" class="card" >
+        <transition-group name="fade" tag="div">
+               <div v-for="(card,index) in cards" class="card" :key="card.id || index" >
                <p>Заголовок: {{card.title}} </p>
                <p>Описание: {{card.description}}</p>
                <p>Дэдлайн: {{card.deadline}}</p>
@@ -58,6 +58,7 @@ Vue.component('card', {
                      <button @click="editCard(card)">Редактирование</button>
                 </div>
             </div>
+        </transition-group>
         </div>
     `,
     props: {
@@ -80,7 +81,8 @@ Vue.component('card', {
 Vue.component('works', {
     template: `
         <div>
-            <div v-for="work in works" class="card">
+        <transition-group name="fade" tag="div">
+            <div v-for="(work,index) in works" class="card" :key="work.id || index">
                <p>Заголовок: {{work.title}} </p>
                <p>Описание: {{work.description}}</p>
                <p>Дэдлайн: {{work.deadline}}</p>
@@ -91,6 +93,7 @@ Vue.component('works', {
                     <button @click="editItem(work)">Редактирование</button>
                </div>
             </div> 
+            </transition-group>
         </div>
     `,
     props: {
@@ -112,7 +115,8 @@ Vue.component('works', {
 Vue.component('test', {
     template: `
         <div>
-            <div v-for="test in tests" class="card">
+        <transition-group name="fade" tag="div">
+            <div v-for="(test,index) in tests" class="card" :key="test.id || index">
                <p>Заголовок: {{test.title}} </p>
                <p>Описание: {{test.description}}</p>
                <p>Дэдлайн: {{test.deadline}}</p>
@@ -123,7 +127,8 @@ Vue.component('test', {
                     <button @click="handleClick(test)">Перенести в Выполнненые -></button>
                     <button @click="editItem(test)">Редактирование</button>
                 </div>
-            </div> 
+            </div>
+           </transition-group> 
         </div>
     `,
     props: {
