@@ -22,21 +22,24 @@ body {
 }
 
 .fade-enter-active, .fade-leave-active {
-    transition: all .5s ease;
+    transition: all .7s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
 .fade-enter, .fade-leave-to {
     opacity: 0;
+    transform: translateX(0);
 }
+
 .fade-move {
-    transition: transform .7s ease;
+    transition: transform .7s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .fade-enter-from-left {
     transform: translateX(-100%);
 }
+
 .fade-leave-to-right {
     transform: translateX(100%);
 }
-
 .row {
     display: flex;
     gap:10px;
